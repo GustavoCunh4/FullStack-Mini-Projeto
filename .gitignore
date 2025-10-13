@@ -1,0 +1,20 @@
+# Dependências
+node_modules/
+
+# Build compilado
+dist/
+
+# Arquivos de ambiente
+.env
+
+# Logs
+logs
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Cache do editor
+.vscode/
+.idea/
