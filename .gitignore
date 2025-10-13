@@ -18,3 +18,4 @@ Thumbs.db
 # Cache do editor
 .vscode/
 .idea/
+.vercel
