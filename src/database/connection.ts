@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { logger } from '../utils/logger';
 
-function maskUri(uri: string) {
+export function maskUri(uri: string) {
   try {
     const u = new URL(uri);
     if (u.password) u.password = '****';
@@ -10,6 +10,8 @@ function maskUri(uri: string) {
     return uri.replace(/\/\/([^:]+):[^@]+@/, '//$1:****@');
   }
 }
+
+export let currentMongoUri: string | null = null;
 
 export async function connectDB() {
   const env = process.env.NODE_ENV;
@@ -23,6 +25,6 @@ export async function connectDB() {
   logger.info(`Conectando no MongoDB com URI: ${maskUri(uri)}`);
 
   await mongoose.connect(uri);
+  currentMongoUri = uri;
   logger.info('MongoDB conectado com sucesso');
 }
-
