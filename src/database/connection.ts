@@ -13,10 +13,7 @@ function maskUri(uri: string) {
 
 export async function connectDB() {
   const env = process.env.NODE_ENV;
-  const uri =
-    env === 'production'
-      ? process.env.MONGO_URI_PROD
-      : process.env.MONGO_URI;
+  const uri = env === 'production' ? process.env.MONGO_URI_PROD : process.env.MONGO_URI;
 
   if (!uri) {
     throw new Error('MONGO_URI/MONGO_URI_PROD não definidos no .env');
@@ -28,3 +25,4 @@ export async function connectDB() {
   await mongoose.connect(uri);
   logger.info('MongoDB conectado com sucesso');
 }
+

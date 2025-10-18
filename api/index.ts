@@ -6,4 +6,10 @@ import { connectDB } from '../src/database/connection';
 let conn: Promise<void> | null = null;
 if (!conn) conn = connectDB();
 
-export default serverless(app);
+const handler = serverless(app);
+
+export default async (event: any, context: any) => {
+  if (conn) await conn;
+  return handler(event, context);
+};
+

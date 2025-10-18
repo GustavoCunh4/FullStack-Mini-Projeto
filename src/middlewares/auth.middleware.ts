@@ -29,3 +29,4 @@ export function authMiddleware(req: AuthRequest, res: Response, next: NextFuncti
     return res.status(401).json({ error: 'Token inválido' });
   }
 }
+

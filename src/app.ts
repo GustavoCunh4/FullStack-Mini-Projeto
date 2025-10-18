@@ -13,9 +13,10 @@ app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(routes);
 
 app.use((_req, res) => {
-  res.status(404).json({ error: 'API do FullStack Mini Projeto rodando 🚀' });
+  res.status(404).json({ error: 'Rota não encontrada' });
 });
 
 app.use(errorMiddleware);
 
 export default app;
+

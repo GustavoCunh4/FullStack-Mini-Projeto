@@ -1,0 +1,227 @@
+_type: export
+__export_format: 4
+__export_date: 2025-10-18T00:00:00.000Z
+__export_source: insomnia.desktop.app
+resources:
+  - _id: wrk_fullstack_mini
+    _type: workspace
+    name: FullStack Mini Projeto
+    scope: design
+
+  - _id: env_base
+    _type: environment
+    parentId: wrk_fullstack_mini
+    name: Base Environment
+    data:
+      baseUrl: http://localhost:3000
+    dataPropertyOrder:
+      &ref_0
+      - baseUrl
+
+  - _id: env_local
+    _type: environment
+    parentId: env_base
+    name: Local
+    data:
+      baseUrl: http://localhost:3000
+    dataPropertyOrder: *ref_0
+
+  - _id: env_prod
+    _type: environment
+    parentId: env_base
+    name: Production
+    data:
+      baseUrl: https://seu-projeto.vercel.app
+    dataPropertyOrder: *ref_0
+
+  - _id: fld_auth
+    _type: request_group
+    parentId: wrk_fullstack_mini
+    name: Auth
+
+  - _id: fld_protected
+    _type: request_group
+    parentId: wrk_fullstack_mini
+    name: Protected
+
+  # ---------- Register ----------
+  - _id: req_register_success
+    _type: request
+    parentId: fld_auth
+    name: Register - success
+    method: POST
+    url: "{{ _.baseUrl }}/register"
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "name": "Guga Teste",
+          "email": "guga.success@example.com",
+          "password": "Guga123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+
+  - _id: req_register_duplicate
+    _type: request
+    parentId: fld_auth
+    name: Register - duplicate email
+    method: POST
+    url: "{{ _.baseUrl }}/register"
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "name": "Guga Teste",
+          "email": "guga.success@example.com",
+          "password": "OutraSenha123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+
+  - _id: req_register_invalid_password
+    _type: request
+    parentId: fld_auth
+    name: Register - invalid password
+    method: POST
+    url: "{{ _.baseUrl }}/register"
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "name": "Carol",
+          "email": "carol@example.com",
+          "password": "123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+
+  - _id: req_register_invalid_email
+    _type: request
+    parentId: fld_auth
+    name: Register - invalid email
+    method: POST
+    url: "{{ _.baseUrl }}/register"
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "name": "Bob",
+          "email": "email_invalido",
+          "password": "123456"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+
+  - _id: req_register_malformed
+    _type: request
+    parentId: fld_auth
+    name: Register - malformed
+    method: POST
+    url: "{{ _.baseUrl }}/register"
+    body:
+      mimeType: application/json
+      text: |
+        { "email": "dan@example.com" }
+    headers:
+      - name: Content-Type
+        value: application/json
+
+  # ---------- Login ----------
+  - _id: req_login_success
+    _type: request
+    parentId: fld_auth
+    name: Login - success
+    method: POST
+    url: "{{ _.baseUrl }}/login"
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "email": "guga.success@example.com",
+          "password": "Guga123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+
+  - _id: req_login_wrong_password
+    _type: request
+    parentId: fld_auth
+    name: Login - wrong password
+    method: POST
+    url: "{{ _.baseUrl }}/login"
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "email": "guga.success@example.com",
+          "password": "errada123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+
+  - _id: req_login_invalid_email
+    _type: request
+    parentId: fld_auth
+    name: Login - invalid email
+    method: POST
+    url: "{{ _.baseUrl }}/login"
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "email": "nao_e_email",
+          "password": "123456"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+
+  - _id: req_login_malformed
+    _type: request
+    parentId: fld_auth
+    name: Login - malformed
+    method: POST
+    url: "{{ _.baseUrl }}/login"
+    body:
+      mimeType: application/json
+      text: |
+        { "email": "falta_senha@example.com" }
+    headers:
+      - name: Content-Type
+        value: application/json
+
+  # ---------- Protected ----------
+  - _id: req_protected_valid
+    _type: request
+    parentId: fld_protected
+    name: Protected - with valid token
+    method: GET
+    url: "{{ _.baseUrl }}/protected"
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_login_success', '$.token', 'NO_TOKEN' %}"
+
+  - _id: req_protected_no_token
+    _type: request
+    parentId: fld_protected
+    name: Protected - without token
+    method: GET
+    url: "{{ _.baseUrl }}/protected"
+
+  - _id: req_protected_invalid_token
+    _type: request
+    parentId: fld_protected
+    name: Protected - with invalid token
+    method: GET
+    url: "{{ _.baseUrl }}/protected"
+    headers:
+      - name: Authorization
+        value: Bearer INVALID_TOKEN_123
+
