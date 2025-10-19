@@ -15,7 +15,8 @@ export let currentMongoUri: string | null = null;
 
 export async function connectDB() {
   const env = process.env.NODE_ENV;
-  const uri = env === 'production' ? process.env.MONGO_URI_PROD : process.env.MONGO_URI;
+  const uri =
+    env === 'production' ? process.env.MONGO_URI_PROD : process.env.MONGO_URI;
 
   if (!uri) {
     throw new Error('MONGO_URI/MONGO_URI_PROD não definidos no .env');
@@ -24,7 +25,15 @@ export async function connectDB() {
   logger.info(`Ambiente: ${env}`);
   logger.info(`Conectando no MongoDB com URI: ${maskUri(uri)}`);
 
-  await mongoose.connect(uri);
-  currentMongoUri = uri;
-  logger.info('MongoDB conectado com sucesso');
+  try {
+    await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: Number(process.env.MONGO_TIMEOUT_MS || 5000)
+    });
+    currentMongoUri = uri;
+    logger.info('MongoDB conectado com sucesso');
+  } catch (err: any) {
+    logger.error(`Falha ao conectar no MongoDB: ${err?.message || err}`);
+    throw err;
+  }
 }
+

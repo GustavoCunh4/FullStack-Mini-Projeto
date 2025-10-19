@@ -20,7 +20,19 @@ export default async (event: any, context: any) => {
 
   // Conecta no banco somente quando necessário
   if (!conn) conn = connectDB();
-  await conn;
+  try {
+    await conn;
+  } catch (err: any) {
+    conn = null;
+    return {
+      statusCode: 503,
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        error: 'Falha ao conectar ao banco',
+        detail: err?.message || String(err)
+      })
+    };
+  }
 
   return handler(event, context);
 };
