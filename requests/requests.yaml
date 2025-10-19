@@ -6,7 +6,7 @@ resources:
   - _id: wrk_fullstack_mini
     _type: workspace
     name: FullStack Mini Projeto
-    scope: design
+    scope: collection
 
   - _id: env_base
     _type: environment
@@ -43,6 +43,11 @@ resources:
     _type: request_group
     parentId: wrk_fullstack_mini
     name: Protected
+
+  - _id: fld_debug
+    _type: request_group
+    parentId: wrk_fullstack_mini
+    name: Debug
 
   # ---------- Register ----------
   - _id: req_register_success
@@ -225,3 +230,10 @@ resources:
       - name: Authorization
         value: Bearer INVALID_TOKEN_123
 
+  # ---------- Debug (dev only) ----------
+  - _id: req_debug_db
+    _type: request
+    parentId: fld_debug
+    name: Debug - current DB info
+    method: GET
+    url: "{{ _.baseUrl }}/_debug/db"
