@@ -55,7 +55,7 @@ resources:
     parentId: fld_auth
     name: Register - success
     method: POST
-    url: "{{ _.baseUrl }}/register"
+    url: "{{ baseUrl }}/register"
     body:
       mimeType: application/json
       text: |
@@ -73,7 +73,7 @@ resources:
     parentId: fld_auth
     name: Register - duplicate email
     method: POST
-    url: "{{ _.baseUrl }}/register"
+    url: "{{ baseUrl }}/register"
     body:
       mimeType: application/json
       text: |
@@ -91,7 +91,7 @@ resources:
     parentId: fld_auth
     name: Register - invalid password
     method: POST
-    url: "{{ _.baseUrl }}/register"
+    url: "{{ baseUrl }}/register"
     body:
       mimeType: application/json
       text: |
@@ -109,7 +109,7 @@ resources:
     parentId: fld_auth
     name: Register - invalid email
     method: POST
-    url: "{{ _.baseUrl }}/register"
+    url: "{{ baseUrl }}/register"
     body:
       mimeType: application/json
       text: |
@@ -127,7 +127,7 @@ resources:
     parentId: fld_auth
     name: Register - malformed
     method: POST
-    url: "{{ _.baseUrl }}/register"
+    url: "{{ baseUrl }}/register"
     body:
       mimeType: application/json
       text: |
@@ -142,7 +142,7 @@ resources:
     parentId: fld_auth
     name: Login - success
     method: POST
-    url: "{{ _.baseUrl }}/login"
+    url: "{{ baseUrl }}/login"
     body:
       mimeType: application/json
       text: |
@@ -159,7 +159,7 @@ resources:
     parentId: fld_auth
     name: Login - wrong password
     method: POST
-    url: "{{ _.baseUrl }}/login"
+    url: "{{ baseUrl }}/login"
     body:
       mimeType: application/json
       text: |
@@ -176,7 +176,7 @@ resources:
     parentId: fld_auth
     name: Login - invalid email
     method: POST
-    url: "{{ _.baseUrl }}/login"
+    url: "{{ baseUrl }}/login"
     body:
       mimeType: application/json
       text: |
@@ -193,7 +193,7 @@ resources:
     parentId: fld_auth
     name: Login - malformed
     method: POST
-    url: "{{ _.baseUrl }}/login"
+    url: "{{ baseUrl }}/login"
     body:
       mimeType: application/json
       text: |
@@ -208,7 +208,7 @@ resources:
     parentId: fld_protected
     name: Protected - with valid token
     method: GET
-    url: "{{ _.baseUrl }}/protected"
+    url: "{{ baseUrl }}/protected"
     authentication:
       type: bearer
       token: "{% response 'body', 'req_login_success', '$.token', 'NO_TOKEN' %}"
@@ -218,14 +218,14 @@ resources:
     parentId: fld_protected
     name: Protected - without token
     method: GET
-    url: "{{ _.baseUrl }}/protected"
+    url: "{{ baseUrl }}/protected"
 
   - _id: req_protected_invalid_token
     _type: request
     parentId: fld_protected
     name: Protected - with invalid token
     method: GET
-    url: "{{ _.baseUrl }}/protected"
+    url: "{{ baseUrl }}/protected"
     headers:
       - name: Authorization
         value: Bearer INVALID_TOKEN_123
@@ -236,4 +236,4 @@ resources:
     parentId: fld_debug
     name: Debug - current DB info
     method: GET
-    url: "{{ _.baseUrl }}/_debug/db"
+    url: "{{ baseUrl }}/_debug/db"
