@@ -3,14 +3,23 @@ import serverless from 'serverless-http';
 import app from '../src/app';
 import { connectDB } from '../src/database/connection';
 
-// Inicie a conexão de forma preguiçosa e compartilhe entre invocações
 let conn: Promise<void> | null = null;
 
 const handler = serverless(app);
 
 export default async (event: any, context: any) => {
-  // Health check rápido que não depende do banco (evita timeout e ajuda a diagnosticar roteamento)
-  if (event?.path === '/healthz' || event?.rawUrl?.endsWith('/healthz')) {
+  // Log básico para entender como o Vercel está encaminhando a requisição
+  console.log('lambda:event', {
+    path: event?.path,
+    rawUrl: event?.rawUrl,
+    method: event?.httpMethod,
+    routeKey: event?.routeKey
+  });
+
+  const rawUrl = event?.rawUrl as string | undefined;
+  const path = event?.path as string | undefined;
+
+  if (path === '/healthz' || rawUrl?.endsWith('/healthz')) {
     return {
       statusCode: 200,
       headers: { 'content-type': 'application/json' },
@@ -18,7 +27,6 @@ export default async (event: any, context: any) => {
     };
   }
 
-  // Conecta no banco somente quando necessário
   if (!conn) conn = connectDB();
   try {
     await conn;
@@ -36,3 +44,4 @@ export default async (event: any, context: any) => {
 
   return handler(event, context);
 };
+
