@@ -1,4 +1,4 @@
-import 'dotenv/config';
+﻿import 'dotenv/config';
 import serverless from 'serverless-http';
 import app from '../src/app';
 import { connectDB } from '../src/database/connection';
@@ -8,7 +8,7 @@ let conn: Promise<void> | null = null;
 const handler = serverless(app);
 
 export default async (event: any, context: any) => {
-  // Log básico para entender como o Vercel está encaminhando a requisição
+  // Log basico para entender como o Vercel esta encaminhando a requisicao
   console.log('lambda:event', {
     path: event?.path,
     rawUrl: event?.rawUrl,
@@ -44,4 +44,3 @@ export default async (event: any, context: any) => {
 
   return handler(event, context);
 };
-

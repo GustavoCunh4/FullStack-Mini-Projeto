@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+﻿import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 export interface AuthRequest extends Request {
@@ -8,17 +8,17 @@ export interface AuthRequest extends Request {
 export function authMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
   const header = req.headers['authorization'];
   if (!header) {
-    return res.status(401).json({ error: 'Token não informado' });
+    return res.status(401).json({ error: 'Token nao informado' });
   }
 
   const [type, token] = header.split(' ');
   if (type !== 'Bearer' || !token) {
-    return res.status(401).json({ error: 'Formato de Authorization inválido' });
+    return res.status(401).json({ error: 'Formato de Authorization invalido' });
   }
 
   const secret = process.env.JWT_SECRET;
   if (!secret) {
-    return res.status(500).json({ error: 'Configuração JWT ausente' });
+    return res.status(500).json({ error: 'Configuracao JWT ausente' });
   }
 
   try {
@@ -26,7 +26,6 @@ export function authMiddleware(req: AuthRequest, res: Response, next: NextFuncti
     (req as AuthRequest).user = payload;
     next();
   } catch {
-    return res.status(401).json({ error: 'Token inválido' });
+    return res.status(401).json({ error: 'Token invalido' });
   }
 }
-

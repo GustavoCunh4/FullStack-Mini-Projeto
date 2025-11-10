@@ -19,7 +19,7 @@ export async function connectDB() {
     env === 'production' ? process.env.MONGO_URI_PROD : process.env.MONGO_URI;
 
   if (!uri) {
-    throw new Error('MONGO_URI/MONGO_URI_PROD não definidos no .env');
+    throw new Error('MONGO_URI/MONGO_URI_PROD nao definidos no .env');
   }
 
   logger.info(`Ambiente: ${env}`);

@@ -1,231 +1,324 @@
 _type: export
 __export_format: 4
-__export_date: 2025-10-18T00:00:00.000Z
+__export_date: 2025-10-18 00:00:00+00:00
 __export_source: insomnia.desktop.app
 resources:
-  # Workspace (Collection)
-  - _id: wrk_fsmp
-    _type: workspace
-    name: FullStack Mini Projeto
-    scope: collection
+- _id: wrk_fsmp
+  _type: workspace
+  name: FullStack Mini Projeto
+  scope: collection
+- _id: env_local
+  _type: environment
+  parentId: wrk_fsmp
+  name: Local
+  data:
+    baseUrl: http://localhost:3000
+    otherUserTaskId: PASTE_OTHER_USER_TASK_ID
+- _id: env_prod
+  _type: environment
+  parentId: wrk_fsmp
+  name: Production
+  data:
+    baseUrl: https://seu-projeto.vercel.app
+    otherUserTaskId: PASTE_OTHER_USER_TASK_ID
+- _id: fld_auth
+  _type: request_group
+  parentId: wrk_fsmp
+  name: Auth
+- _id: fld_protected
+  _type: request_group
+  parentId: wrk_fsmp
+  name: Protected
+- _id: fld_debug
+  _type: request_group
+  parentId: wrk_fsmp
+  name: Debug
+- _id: req_register_success
+  _type: request
+  parentId: fld_auth
+  name: Register - success
+  method: POST
+  url: '{{ baseUrl }}/register'
+  body:
+    mimeType: application/json
+    text: "{\n  \"name\": \"Guga Teste\",\n  \"email\": \"guga.success@example.com\"\
+      ,\n  \"password\": \"Guga123\"\n}\n"
+  headers:
+  - name: Content-Type
+    value: application/json
+- _id: req_register_duplicate
+  _type: request
+  parentId: fld_auth
+  name: Register - duplicate email
+  method: POST
+  url: '{{ baseUrl }}/register'
+  body:
+    mimeType: application/json
+    text: "{\n  \"name\": \"Guga Teste\",\n  \"email\": \"guga.success@example.com\"\
+      ,\n  \"password\": \"OutraSenha123\"\n}\n"
+  headers:
+  - name: Content-Type
+    value: application/json
+- _id: req_register_invalid_password
+  _type: request
+  parentId: fld_auth
+  name: Register - invalid password
+  method: POST
+  url: '{{ baseUrl }}/register'
+  body:
+    mimeType: application/json
+    text: "{\n  \"name\": \"Carol\",\n  \"email\": \"carol@example.com\",\n  \"password\"\
+      : \"123\"\n}\n"
+  headers:
+  - name: Content-Type
+    value: application/json
+- _id: req_register_invalid_email
+  _type: request
+  parentId: fld_auth
+  name: Register - invalid email
+  method: POST
+  url: '{{ baseUrl }}/register'
+  body:
+    mimeType: application/json
+    text: "{\n  \"name\": \"Bob\",\n  \"email\": \"email_invalido\",\n  \"password\"\
+      : \"123456\"\n}\n"
+  headers:
+  - name: Content-Type
+    value: application/json
+- _id: req_register_malformed
+  _type: request
+  parentId: fld_auth
+  name: Register - malformed
+  method: POST
+  url: '{{ baseUrl }}/register'
+  body:
+    mimeType: application/json
+    text: '{ "email": "dan@example.com" }
 
-  # Environments (simples, sem herança)
-  - _id: env_local
-    _type: environment
-    parentId: wrk_fsmp
-    name: Local
-    data:
-      baseUrl: http://localhost:3000
+      '
+  headers:
+  - name: Content-Type
+    value: application/json
+- _id: req_login_success
+  _type: request
+  parentId: fld_auth
+  name: Login - success
+  method: POST
+  url: '{{ baseUrl }}/login'
+  body:
+    mimeType: application/json
+    text: "{\n  \"email\": \"guga.success@example.com\",\n  \"password\": \"Guga123\"\
+      \n}\n"
+  headers:
+  - name: Content-Type
+    value: application/json
+- _id: req_login_wrong_password
+  _type: request
+  parentId: fld_auth
+  name: Login - wrong password
+  method: POST
+  url: '{{ baseUrl }}/login'
+  body:
+    mimeType: application/json
+    text: "{\n  \"email\": \"guga.success@example.com\",\n  \"password\": \"errada123\"\
+      \n}\n"
+  headers:
+  - name: Content-Type
+    value: application/json
+- _id: req_login_invalid_email
+  _type: request
+  parentId: fld_auth
+  name: Login - invalid email
+  method: POST
+  url: '{{ baseUrl }}/login'
+  body:
+    mimeType: application/json
+    text: "{\n  \"email\": \"nao_e_email\",\n  \"password\": \"123456\"\n}\n"
+  headers:
+  - name: Content-Type
+    value: application/json
+- _id: req_login_malformed
+  _type: request
+  parentId: fld_auth
+  name: Login - malformed
+  method: POST
+  url: '{{ baseUrl }}/login'
+  body:
+    mimeType: application/json
+    text: '{ "email": "falta_senha@example.com" }
 
-  - _id: env_prod
-    _type: environment
-    parentId: wrk_fsmp
-    name: Production
-    data:
-      baseUrl: https://seu-projeto.vercel.app
-
-  # Grupos
-  - _id: fld_auth
-    _type: request_group
-    parentId: wrk_fsmp
-    name: Auth
-
-  - _id: fld_protected
-    _type: request_group
-    parentId: wrk_fsmp
-    name: Protected
-
-  - _id: fld_debug
-    _type: request_group
-    parentId: wrk_fsmp
-    name: Debug
-
-  # ---------- Register ----------
-  - _id: req_register_success
-    _type: request
-    parentId: fld_auth
-    name: Register - success
-    method: POST
-    url: "{{ baseUrl }}/register"
-    body:
-      mimeType: application/json
-      text: |
-        {
-          "name": "Guga Teste",
-          "email": "guga.success@example.com",
-          "password": "Guga123"
-        }
-    headers:
-      - name: Content-Type
-        value: application/json
-
-  - _id: req_register_duplicate
-    _type: request
-    parentId: fld_auth
-    name: Register - duplicate email
-    method: POST
-    url: "{{ baseUrl }}/register"
-    body:
-      mimeType: application/json
-      text: |
-        {
-          "name": "Guga Teste",
-          "email": "guga.success@example.com",
-          "password": "OutraSenha123"
-        }
-    headers:
-      - name: Content-Type
-        value: application/json
-
-  - _id: req_register_invalid_password
-    _type: request
-    parentId: fld_auth
-    name: Register - invalid password
-    method: POST
-    url: "{{ baseUrl }}/register"
-    body:
-      mimeType: application/json
-      text: |
-        {
-          "name": "Carol",
-          "email": "carol@example.com",
-          "password": "123"
-        }
-    headers:
-      - name: Content-Type
-        value: application/json
-
-  - _id: req_register_invalid_email
-    _type: request
-    parentId: fld_auth
-    name: Register - invalid email
-    method: POST
-    url: "{{ baseUrl }}/register"
-    body:
-      mimeType: application/json
-      text: |
-        {
-          "name": "Bob",
-          "email": "email_invalido",
-          "password": "123456"
-        }
-    headers:
-      - name: Content-Type
-        value: application/json
-
-  - _id: req_register_malformed
-    _type: request
-    parentId: fld_auth
-    name: Register - malformed
-    method: POST
-    url: "{{ baseUrl }}/register"
-    body:
-      mimeType: application/json
-      text: |
-        { "email": "dan@example.com" }
-    headers:
-      - name: Content-Type
-        value: application/json
-
-  # ---------- Login ----------
-  - _id: req_login_success
-    _type: request
-    parentId: fld_auth
-    name: Login - success
-    method: POST
-    url: "{{ baseUrl }}/login"
-    body:
-      mimeType: application/json
-      text: |
-        {
-          "email": "guga.success@example.com",
-          "password": "Guga123"
-        }
-    headers:
-      - name: Content-Type
-        value: application/json
-
-  - _id: req_login_wrong_password
-    _type: request
-    parentId: fld_auth
-    name: Login - wrong password
-    method: POST
-    url: "{{ baseUrl }}/login"
-    body:
-      mimeType: application/json
-      text: |
-        {
-          "email": "guga.success@example.com",
-          "password": "errada123"
-        }
-    headers:
-      - name: Content-Type
-        value: application/json
-
-  - _id: req_login_invalid_email
-    _type: request
-    parentId: fld_auth
-    name: Login - invalid email
-    method: POST
-    url: "{{ baseUrl }}/login"
-    body:
-      mimeType: application/json
-      text: |
-        {
-          "email": "nao_e_email",
-          "password": "123456"
-        }
-    headers:
-      - name: Content-Type
-        value: application/json
-
-  - _id: req_login_malformed
-    _type: request
-    parentId: fld_auth
-    name: Login - malformed
-    method: POST
-    url: "{{ baseUrl }}/login"
-    body:
-      mimeType: application/json
-      text: |
-        { "email": "falta_senha@example.com" }
-    headers:
-      - name: Content-Type
-        value: application/json
-
-  # ---------- Protected ----------
-  - _id: req_protected_valid
-    _type: request
-    parentId: fld_protected
-    name: Protected - with valid token
-    method: GET
-    url: "{{ baseUrl }}/protected"
-    authentication:
-      type: bearer
-      token: "{% response 'body', 'req_login_success', '$.token', 'NO_TOKEN' %}"
-
-  - _id: req_protected_no_token
-    _type: request
-    parentId: fld_protected
-    name: Protected - without token
-    method: GET
-    url: "{{ baseUrl }}/protected"
-
-  - _id: req_protected_invalid_token
-    _type: request
-    parentId: fld_protected
-    name: Protected - with invalid token
-    method: GET
-    url: "{{ baseUrl }}/protected"
-    headers:
-      - name: Authorization
-        value: Bearer INVALID_TOKEN_123
-
-  # ---------- Debug (dev only) ----------
-  - _id: req_debug_db
-    _type: request
-    parentId: fld_debug
-    name: Debug - current DB info
-    method: GET
-    url: "{{ baseUrl }}/_debug/db"
-
+      '
+  headers:
+  - name: Content-Type
+    value: application/json
+- _id: req_protected_valid
+  _type: request
+  parentId: fld_protected
+  name: Protected - with valid token
+  method: GET
+  url: '{{ baseUrl }}/protected'
+  authentication:
+    type: bearer
+    token: '{% response ''body'', ''req_login_success'', ''$.token'', ''NO_TOKEN''
+      %}'
+- _id: req_protected_no_token
+  _type: request
+  parentId: fld_protected
+  name: Protected - without token
+  method: GET
+  url: '{{ baseUrl }}/protected'
+- _id: req_protected_invalid_token
+  _type: request
+  parentId: fld_protected
+  name: Protected - with invalid token
+  method: GET
+  url: '{{ baseUrl }}/protected'
+  headers:
+  - name: Authorization
+    value: Bearer INVALID_TOKEN_123
+- _id: req_debug_db
+  _type: request
+  parentId: fld_debug
+  name: Debug - current DB info
+  method: GET
+  url: '{{ baseUrl }}/_debug/db'
+- _id: fld_tasks
+  _type: request_group
+  parentId: wrk_fsmp
+  name: Tasks
+- _id: req_task_create_success
+  _type: request
+  parentId: fld_tasks
+  name: Tasks - create (success)
+  method: POST
+  url: '{{ baseUrl }}/tasks'
+  body:
+    mimeType: application/json
+    text: "{\n  \"title\": \"Revisar entregas do sprint\",\n  \"description\": \"\
+      Garantir que todas as historias foram revisadas\",\n  \"status\": \"pending\"\
+      ,\n  \"priority\": \"high\",\n  \"dueDate\": \"2025-10-31\"\n}"
+  headers:
+  - name: Content-Type
+    value: application/json
+  authentication:
+    type: bearer
+    token: '{% response ''body'', ''req_login_success'', ''$.token'', ''NO_TOKEN''
+      %}'
+- _id: req_task_list_success
+  _type: request
+  parentId: fld_tasks
+  name: Tasks - list (success)
+  method: GET
+  url: '{{ baseUrl }}/tasks?status=pending&priority=high'
+  authentication:
+    type: bearer
+    token: '{% response ''body'', ''req_login_success'', ''$.token'', ''NO_TOKEN''
+      %}'
+- _id: req_task_get_success
+  _type: request
+  parentId: fld_tasks
+  name: Tasks - get by id
+  method: GET
+  url: '{{ baseUrl }}/tasks/{% response ''body'', ''req_task_create_success'', ''$.task._id'',
+    ''NO_TASK_ID'' %}'
+  authentication:
+    type: bearer
+    token: '{% response ''body'', ''req_login_success'', ''$.token'', ''NO_TOKEN''
+      %}'
+- _id: req_task_put_success
+  _type: request
+  parentId: fld_tasks
+  name: Tasks - update (PUT)
+  method: PUT
+  url: '{{ baseUrl }}/tasks/{% response ''body'', ''req_task_create_success'', ''$.task._id'',
+    ''NO_TASK_ID'' %}'
+  body:
+    mimeType: application/json
+    text: "{\n  \"title\": \"Revisar entregas finalizadas\",\n  \"description\": \"\
+      Checklist completo com o time\",\n  \"status\": \"in_progress\",\n  \"priority\"\
+      : \"medium\",\n  \"dueDate\": \"2025-11-05\"\n}"
+  headers:
+  - name: Content-Type
+    value: application/json
+  authentication:
+    type: bearer
+    token: '{% response ''body'', ''req_login_success'', ''$.token'', ''NO_TOKEN''
+      %}'
+- _id: req_task_patch_success
+  _type: request
+  parentId: fld_tasks
+  name: Tasks - partial update (PATCH)
+  method: PATCH
+  url: '{{ baseUrl }}/tasks/{% response ''body'', ''req_task_create_success'', ''$.task._id'',
+    ''NO_TASK_ID'' %}'
+  body:
+    mimeType: application/json
+    text: "{\n  \"status\": \"completed\",\n  \"priority\": \"low\"\n}"
+  headers:
+  - name: Content-Type
+    value: application/json
+  authentication:
+    type: bearer
+    token: '{% response ''body'', ''req_login_success'', ''$.token'', ''NO_TOKEN''
+      %}'
+- _id: req_task_delete_success
+  _type: request
+  parentId: fld_tasks
+  name: Tasks - delete (success)
+  method: DELETE
+  url: '{{ baseUrl }}/tasks/{% response ''body'', ''req_task_create_success'', ''$.task._id'',
+    ''NO_TASK_ID'' %}'
+  authentication:
+    type: bearer
+    token: '{% response ''body'', ''req_login_success'', ''$.token'', ''NO_TOKEN''
+      %}'
+- _id: req_task_create_no_token
+  _type: request
+  parentId: fld_tasks
+  name: Tasks - create without token
+  method: POST
+  url: '{{ baseUrl }}/tasks'
+  body:
+    mimeType: application/json
+    text: "{\n  \"title\": \"Revisar entregas do sprint\",\n  \"description\": \"\
+      Garantir que todas as historias foram revisadas\",\n  \"status\": \"pending\"\
+      ,\n  \"priority\": \"high\",\n  \"dueDate\": \"2025-10-31\"\n}"
+  headers:
+  - name: Content-Type
+    value: application/json
+- _id: req_task_list_invalid_token
+  _type: request
+  parentId: fld_tasks
+  name: Tasks - list with invalid token
+  method: GET
+  url: '{{ baseUrl }}/tasks'
+  headers:
+  - name: Authorization
+    value: Bearer INVALID_TOKEN_123
+- _id: req_task_get_forbidden
+  _type: request
+  parentId: fld_tasks
+  name: Tasks - access denied (other user)
+  method: GET
+  url: '{{ baseUrl }}/tasks/{{ otherUserTaskId }}'
+  authentication:
+    type: bearer
+    token: '{% response ''body'', ''req_login_success'', ''$.token'', ''NO_TOKEN''
+      %}'
+  description: Atualize o ID para uma tarefa pertencente a outro usuario.
+- _id: req_task_create_malformed
+  _type: request
+  parentId: fld_tasks
+  name: Tasks - malformed body (422)
+  method: POST
+  url: '{{ baseUrl }}/tasks'
+  body:
+    mimeType: application/json
+    text: "{\n  \"description\": 123\n}"
+  headers:
+  - name: Content-Type
+    value: application/json
+  authentication:
+    type: bearer
+    token: '{% response ''body'', ''req_login_success'', ''$.token'', ''NO_TOKEN''
+      %}'
