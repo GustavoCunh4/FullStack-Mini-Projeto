@@ -26,11 +26,27 @@ export async function connectDB() {
   logger.info(`Conectando no MongoDB com URI: ${maskUri(uri)}`);
 
   try {
-    await mongoose.connect(uri, {
-      // Força IPv4; Atlas free/shared costuma liberar apenas IPv4 na allowlist
+    const timeoutMs = Number(process.env.MONGO_CONNECT_TIMEOUT_MS || 8000);
+
+    const connectPromise = mongoose.connect(uri, {
+      // Força IPv4; Atlas free/shared costuma liberar apenas IPv4
       family: 4,
-      serverSelectionTimeoutMS: Number(process.env.MONGO_TIMEOUT_MS || 5000)
+      serverSelectionTimeoutMS: Number(process.env.MONGO_TIMEOUT_MS || 5000),
+      connectTimeoutMS: Number(process.env.MONGO_CONNECT_TIMEOUT_MS || 5000),
+      socketTimeoutMS: Number(process.env.MONGO_SOCKET_TIMEOUT_MS || 10000)
     });
+
+    // Garante que não ficamos pendurados (Vercel derruba em 300s; aqui abortamos em ~8s)
+    await Promise.race([
+      connectPromise,
+      new Promise((_resolve, reject) =>
+        setTimeout(
+          () => reject(new Error(`Mongo connect timeout after ${timeoutMs}ms`)),
+          timeoutMs
+        )
+      )
+    ]);
+
     currentMongoUri = uri;
     logger.info('MongoDB conectado com sucesso');
   } catch (err: any) {
