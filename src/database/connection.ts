@@ -27,6 +27,8 @@ export async function connectDB() {
 
   try {
     await mongoose.connect(uri, {
+      // Força IPv4; Atlas free/shared costuma liberar apenas IPv4 na allowlist
+      family: 4,
       serverSelectionTimeoutMS: Number(process.env.MONGO_TIMEOUT_MS || 5000)
     });
     currentMongoUri = uri;
@@ -36,4 +38,3 @@ export async function connectDB() {
     throw err;
   }
 }
-
